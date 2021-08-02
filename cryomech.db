@@ -1,0 +1,275 @@
+#database for Cryomech Mariano Ruiz SNS
+#Jul 9th 2021
+################WRITE SECTION############
+record(bo, "$(S):$(TA):$(DN):$(N):StartComp") {
+  field(DESC, "Start Compressor")
+  field(DTYP, "stream")
+  field(OUT, "@CM.proto StartComp $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(ASG,  "BEAMLINE, SAMPLEENV, IHC")
+  field(HIGH, "0.5")
+}
+
+record(bo, "$(S):$(TA):$(DN):$(N):StopComp") {
+  field(DESC, "Stop Compressor")
+  field(DTYP, "stream")
+  field(OUT, "@CM.proto StopComp $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(ASG,  "BEAMLINE, SAMPLEENV, IHC")
+  field(HIGH, "0.5")
+}
+###############READ SECTION##############
+#Communication sequencer
+record(seq, "$(S):$(TA):$(DN):$(N):COMSEQ") {
+  field(DESC, "CryoMech Communication Sequencer")
+  field(PINI, "YES")
+  field(SCAN, "5 second")
+  field(DOL1, "1")
+  field(DLY1, "0.1")
+  field(LNK1, "$(S):$(TA):$(DN):$(N):StatusONOFF.PROC")
+  field(DOL2, "1")
+  field(DLY2, "0.1")
+  field(LNK2, "$(S):$(TA):$(DN):$(N):INCoolantTempRaw.PROC")
+  field(DOL3, "1")
+  field(DLY3, "0.1")
+  field(LNK3, "$(S):$(TA):$(DN):$(N):OUTCoolantTempRaw.PROC")
+  field(DOL4, "1")
+  field(DLY4, "0.1")
+  field(LNK4, "$(S):$(TA):$(DN):$(N):OilTempRaw.PROC")
+  field(DOL5, "1")
+  field(DLY5, "0.1")
+  field(LNK5, "$(S):$(TA):$(DN):$(N):HeTempRaw.PROC")
+  field(DOL6, "1")
+  field(DLY6, "0.1")
+  field(LNK6, "$(S):$(TA):$(DN):$(N):HighPressSideRaw.PROC")
+  field(DOL7, "1")
+  field(DLY7, "0.1")
+  field(LNK7, "$(S):$(TA):$(DN):$(N):LowPressSideRaw.PROC")
+  field(DOL8, "1")
+  field(DLY8, "0.1")
+  field(LNK8, "$(S):$(TA):$(DN):$(N):Current.PROC")
+  field(DOL9, "1")
+  field(DLY9, "0.1")
+  field(LNK9, "$(S):$(TA):$(DN):$(N):Status.PROC")
+#  field(DOLA, "1")
+#  field(DLYA, "0.1")
+#  field(LNKA, "$(S):$(TA):$(DN):$(N):.PROC")
+}
+
+record(ai, "$(S):$(TA):$(DN):$(N):StatusONOFF") {
+  field(DESC, "Read Compressor ON OFF")
+  field(DTYP, "stream")
+  field(INP, "@CM.proto readCompONOFF $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(SCAN, "Passive")
+}
+
+record(ai, "$(S):$(TA):$(DN):$(N):INCoolantTempRaw") {
+  field(DESC, "Input Coolant Temp Raw")
+  field(DTYP, "stream")
+  field(INP, "@CM.proto ReadINCoolantTemp $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(SCAN, "Passive")
+}
+record(calc, "$(S):$(TA):$(DN):$(N):INCoolantTemp"){
+  field(DESC, "Input Coolant Temp")
+  field(INPA, "$(S):$(TA):$(DN):$(N):INCoolantTempRaw CP")
+  field(CALC, "(A*0.1)*1.8+32")
+  field(EGU, "F")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(PREC, "2")
+  field(HIHI, "150")
+  field(HHSV, "MAJOR")
+  info(autosaveFields, "HIHI")
+
+}
+
+record(calc, "$(S):$(TA):$(DN):$(N):INCoolantTempAlarm"){
+  field(DESC, "Input Coolant Temp Alarm")
+  field(INPA, "$(S):$(TA):$(DN):$(N):INCoolantTemp CP MS")
+  field(INPB, "$(S):$(TA):$(DN):$(N):INCoolantTemp.HIHI CP MS")
+  field(CALC, "A>B")
+  info(archive, "Monitor, 00:01:00, VAL")
+}
+
+
+
+
+record(ai, "$(S):$(TA):$(DN):$(N):OUTCoolantTempRaw") {
+  field(DESC, "Output Coolant Temp")
+  field(DTYP, "stream")
+  field(INP, "@CM.proto ReadOUTCoolantTemp $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(SCAN, "Passive")
+}
+
+record(calc, "$(S):$(TA):$(DN):$(N):OUTCoolantTemp"){
+  field(DESC, "Output Coolant Temp")
+  field(INPA, "$(S):$(TA):$(DN):$(N):OUTCoolantTempRaw CP")
+  field(CALC, "(A*0.1)*1.8+32")
+  field(EGU, "F")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(PREC, "2")
+  field(HIHI, "150")
+  field(HHSV, "MAJOR")
+  info(autosaveFields, "HIHI")
+
+}
+
+record(calc, "$(S):$(TA):$(DN):$(N):OUTCoolantTempAlarm"){
+  field(DESC, "Output Coolant Temp Alarm")
+  field(INPA, "$(S):$(TA):$(DN):$(N):OUTCoolantTemp CP MS")
+  field(INPB, "$(S):$(TA):$(DN):$(N):OUTCoolantTemp.HIHI CP MS")
+  field(CALC, "A>B")
+  info(archive, "Monitor, 00:01:00, VAL")
+}
+
+
+record(ai, "$(S):$(TA):$(DN):$(N):OilTempRaw") {
+  field(DESC, "Read Oil Temp")
+  field(DTYP, "stream")
+  field(INP, "@CM.proto ReadOilTemp $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(SCAN, "Passive")
+}
+
+record(calc, "$(S):$(TA):$(DN):$(N):OilTemp"){
+  field(DESC, "Input Oil Temp")
+  field(INPA, "$(S):$(TA):$(DN):$(N):OilTempRaw CP")
+  field(CALC, "(A*0.1)*1.8+32")
+  field(EGU, "F")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(PREC, "2")
+  field(HIHI, "150")
+  field(HHSV, "MAJOR")
+  info(autosaveFields, "HIHI")
+}
+
+
+record(calc, "$(S):$(TA):$(DN):$(N):OilTempAlarm"){
+  field(DESC, "Input Oil Temp")
+  field(INPA, "$(S):$(TA):$(DN):$(N):OilTemp CP MS")
+  field(INPB, "$(S):$(TA):$(DN):$(N):OilTemp.HIHI CP MS")
+  field(CALC, "A>B")
+  info(archive, "Monitor, 00:01:00, VAL")
+}
+
+
+
+record(ai, "$(S):$(TA):$(DN):$(N):HeTempRaw") {
+  field(DESC, "Read He Temp")
+  field(DTYP, "stream")
+  field(INP, "@CM.proto ReadHeTemp $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(SCAN, "Passive")
+}
+
+record(calc, "$(S):$(TA):$(DN):$(N):HeTemp"){
+  field(DESC, "Read He Temp")
+  field(INPA, "$(S):$(TA):$(DN):$(N):HeTempRaw CP")
+  field(CALC, "(A*0.1)*1.8+32")
+  field(EGU, "F")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(PREC, "2")
+  field(HIHI, "150")
+  field(HHSV, "MAJOR")
+  info(autosaveFields, "HIHI")
+
+}
+
+###
+record(ai, "$(S):$(TA):$(DN):$(N):HighPressSideRaw") {
+  field(DESC, "Read High Pressure Side Raw")
+  field(DTYP, "stream")
+  field(INP, "@CM.proto ReadHPressSide $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(SCAN, "Passive")
+}
+
+
+record(calc, "$(S):$(TA):$(DN):$(N):HighPressSide"){
+  field(DESC, "Read High Pressure Side")
+  field(INPA, "$(S):$(TA):$(DN):$(N):HighPressSideRaw CP")
+  field(CALC, "A*0.1")
+  field(EGU, "PSI")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(HIHI, "150")
+  field(HHSV, "MAJOR")
+  info(autosaveFields, "HIHI")
+
+}
+
+record(calc, "$(S):$(TA):$(DN):$(N):HighPressSideAlarm"){
+  field(DESC, "High Pressure Side Alarm")
+  field(INPA, "$(S):$(TA):$(DN):$(N):HighPressSide CP MS")
+  field(INPB, "$(S):$(TA):$(DN):$(N):HighPressSide.HIHI CP MS")
+  field(CALC, "A>B")
+  info(archive, "Monitor, 00:01:00, VAL")
+}
+
+
+
+
+##
+record(ai, "$(S):$(TA):$(DN):$(N):LowPressSideRaw") {
+  field(DESC, "Read Low Pressure Side Raw")
+  field(DTYP, "stream")
+  field(INP, "@CM.proto ReadLPressSide $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(SCAN, "Passive")
+}
+
+record(calc, "$(S):$(TA):$(DN):$(N):LowPressSide"){
+  field(DESC, "Read Low Pressure Side")
+  field(INPA, "$(S):$(TA):$(DN):$(N):LowPressSideRaw CP")
+  field(CALC, "A*0.1")
+  field(EGU, "PSI")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(HIHI, "150")
+  field(HHSV, "MAJOR")
+  info(autosaveFields, "HIHI")
+
+}
+
+record(calc, "$(S):$(TA):$(DN):$(N):LowPressSideAlarm"){
+  field(DESC, "Low Pressure Side Alarm")
+  field(INPA, "$(S):$(TA):$(DN):$(N):LowPressSide CP MS")
+  field(INPB, "$(S):$(TA):$(DN):$(N):LowPressSide.HIHI CP MS")
+  field(CALC, "A>B")
+  info(archive, "Monitor, 00:01:00, VAL")
+}
+
+
+
+record(ai, "$(S):$(TA):$(DN):$(N):Current") {
+  field(DESC, "Read Motor Current")
+  field(DTYP, "stream")
+  field(INP, "@CM.proto ReadMotorCurrent $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(SCAN, "Passive")
+  field(EGU, "A")
+  field(HIHI, "150")
+  field(HHSV, "MAJOR")
+  info(autosaveFields, "HIHI")
+
+}
+
+record(calc, "$(S):$(TA):$(DN):$(N):CurrentAlarm"){
+  field(DESC, "Current Alarm")
+  field(INPA, "$(S):$(TA):$(DN):$(N):Current CP MS")
+  field(INPB, "$(S):$(TA):$(DN):$(N):Current.HIHI CP MS")
+  field(CALC, "A>B")
+  info(archive, "Monitor, 00:01:00, VAL")
+}
+
+
+record(ai, "$(S):$(TA):$(DN):$(N):Status") {
+  field(DESC, "Read Status or Warning")
+  field(DTYP, "stream")
+  field(INP, "@CM.proto ReadStatus $(COMMS)")
+  info(archive, "Monitor, 00:01:00, VAL")
+  field(SCAN, "Passive")
+  field(HIHI, "1")
+  field(HHSV, "MAJOR")
+}
+

@@ -1,0 +1,29 @@
+file cryomech.db
+{
+	pattern {S, TA, DN, N, COMMS}
+		{BL15, SE, CM, 1, COM1}
+                {BL15, SE, CM, 2, COM2}
+                {BL15, SE, CM, 3, COM3}
+                {BL15, SE, CM, 4, COM4}
+
+}
+
+#And all alarms from local IOC
+#In a local DB using one calc record
+#put the PV name of that calc record
+#OP is for oil pressure
+file ALLAlarms.db
+{
+pattern {PV OP1 OP2 OP3 OP4}
+        {BL15:SE:CM:Alarms}
+
+}
+
+
+
+
+
+
+
+
+

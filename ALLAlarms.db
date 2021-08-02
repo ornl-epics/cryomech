@@ -1,0 +1,86 @@
+record(calc, "$(PV)1") {
+  field(DESC, "All Alarms Anded")
+  field(INPA, "BL15:SE:CM:1:Status CP MS")
+  field(INPB, "BL15:SE:CM:1:OilTempAlarm CP MS")
+  field(INPC, "BL15:SE:CM:1:INCoolantTempAlarm CP MS")
+  field(INPD, "BL15:SE:CM:1:OUTCoolantTempAlarm CP MS")
+  field(INPE, "BL15:SE:CM:1:LowPressSideAlarm CP MS")
+  field(INPE, "BL15:SE:CM:1:HighPressSideAlarm CP MS")
+  field(INPF, "BL15:SE:CM:1:CurrentAlarm CP MS")
+  field(CALC, "(A+B+C+D+E+F)>0?1:0")
+  field(HIHI, "1")
+  field(HHSV, "MAJOR")
+  info(archive, "Monitor, 00:00:01, VAL")
+}
+
+record(calc, "$(PV)2") {
+  field(DESC, "All Alarms Anded")
+  field(INPA, "BL15:SE:CM:2:Status CP MS")
+  field(INPB, "BL15:SE:CM:2:OilTempAlarm CP MS")
+  field(INPC, "BL15:SE:CM:2:INCoolantTempAlarm CP MS")
+  field(INPD, "BL15:SE:CM:2:OUTCoolantTempAlarm CP MS")
+  field(INPE, "BL15:SE:CM:2:LowPressSideAlarm CP MS")
+  field(INPE, "BL15:SE:CM:2:HighPressSideAlarm CP MS")
+  field(INPF, "BL15:SE:CM:2:CurrentAlarm CP MS")
+  field(CALC, "(A+B+C+D+E+F)>0?1:0")
+  field(HIHI, "1")
+  field(HHSV, "MAJOR")
+  info(archive, "Monitor, 00:00:01, VAL")
+}
+
+record(calc, "$(PV)3") {
+  field(DESC, "All Alarms Anded")
+  field(INPA, "BL15:SE:CM:3:Status CP MS")
+  field(INPB, "BL15:SE:CM:3:OilTempAlarm CP MS")
+  field(INPC, "BL15:SE:CM:3:INCoolantTempAlarm CP MS")
+  field(INPD, "BL15:SE:CM:3:OUTCoolantTempAlarm CP MS")
+  field(INPE, "BL15:SE:CM:3:LowPressSideAlarm CP MS")
+  field(INPE, "BL15:SE:CM:3:HighPressSideAlarm CP MS")
+  field(INPF, "BL15:SE:CM:3:CurrentAlarm CP MS")
+  field(CALC, "(A+B+C+D+E+F)>0?1:0")
+  field(HIHI, "1")
+  field(HHSV, "MAJOR")
+  info(archive, "Monitor, 00:00:01, VAL")
+}
+
+record(calc, "$(PV)4") {
+  field(DESC, "All Alarms Anded")
+  field(INPA, "BL15:SE:CM:4:Status CP MS")
+  field(INPB, "BL15:SE:CM:4:OilTempAlarm CP MS")
+  field(INPC, "BL15:SE:CM:4:INCoolantTempAlarm CP MS")
+  field(INPD, "BL15:SE:CM:4:OUTCoolantTempAlarm CP MS")
+  field(INPE, "BL15:SE:CM:4:LowPressSideAlarm CP MS")
+  field(INPE, "BL15:SE:CM:4:HighPressSideAlarm CP MS")
+  field(INPF, "BL15:SE:CM:4:CurrentAlarm CP MS")
+  field(CALC, "(A+B+C+D+E+F)>0?1:0")
+  field(HIHI, "1")
+  field(HHSV, "MAJOR")
+  info(archive, "Monitor, 00:00:01, VAL")
+}
+
+
+
+
+
+record(calc, "$(PV)SUM") {
+  field(DESC, "All Alarms Anded")
+  field(INPA, "$(PV)1 CP NMS")
+  field(INPB, "$(PV)2 CP NMS")
+  field(INPC, "$(PV)3 CP NMS")
+  field(INPD, "$(PV)4 CP NMS")
+  field(CALC, "(A>0)|(B>0)|(C>0)|(D>0)?1:0")
+  field(HIHI, "1")
+  field(HHSV, "MAJOR")
+  info(archive, "Monitor, 00:00:01, VAL")
+}
+
+
+record(bi, "$(PV)BI"){
+  field(DESC, "Alarm for Alarm Handler")
+  field(INP, "$(PV)SUM CP MS")
+  field(ONAM, "Alarm")
+  field(ZNAM, "OK")
+}
+
+
+
